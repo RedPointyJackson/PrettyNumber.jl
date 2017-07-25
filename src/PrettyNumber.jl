@@ -40,7 +40,7 @@ mantissa(x::Number) = x / exp10(exponent(x))
 function integer_to_sup(x::Integer)
     str = dec(abs(x))
     L = length(str)
-    sups = Array(Char,L)
+    sups = Array{Char}(L)
     for i in 1:L
         c = str[i]
         n = Int64(c) - 48
