@@ -1,5 +1,5 @@
 using PrettyNumber
-using Base.Test
+using Test
 
 # Check test validity
 import PrettyNumber.max_int_len
@@ -71,4 +71,4 @@ end
     @test prettify("$num") == "3.142"
 end
 
-print_with_color(:green,"All test passed ✓\n")
+printstyled("All test passed ✓\n", color=:green)
