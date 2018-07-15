@@ -1,5 +1,6 @@
 module PrettyNumber
 
+using Printf
 export prettify, prettyprint
 
 
@@ -38,9 +39,9 @@ mantissa(x::Number) = x / exp10(exponent(x))
 # Superindex
 "Return the unicode version of x as a superindex."
 function integer_to_sup(x::Integer)
-    str = dec(abs(x))
+    str = string(abs(x))
     L = length(str)
-    sups = Array{Char}(L)
+    sups = Array{Char}(undef, L)
     for i in 1:L
         c = str[i]
         n = Int64(c) - 48
@@ -94,13 +95,13 @@ Number of significant digits.
 """
 function sig_digits(x::AbstractString)
     # remove sign and exponent
-    x = replace(x,r"e.*","")
-    x = replace(x,"+","")
-    x = replace(x,"-","")
+    x = replace(x,r"e.*"=>"")
+    x = replace(x,"+"=>"")
+    x = replace(x,"-"=>"")
     # remove leading zeroes and possible dot
-    x = replace(x,r"^0*\.?0*","")
+    x = replace(x,r"^0*\.?0*"=>"")
     # remove point so we dont count it as character
-    x = replace(x,".","")
+    x = replace(x,"."=>"")
     return length(x)
 end
 sig_digits(x::Number) = x |> string |> sig_digits
@@ -119,11 +120,11 @@ function pretty(x::Number)
         whole_part_len = @sprintf("%d",abs(whole)) |> length
         decimal_part_len = sig_digits(x) - whole_part_len
         # Small enough, don't touch it.
-        if whole_part_len ≤ max_whole_part_len && round(x,max_decimals) ≠ 0
+        if whole_part_len ≤ max_whole_part_len && round(x,digits=max_decimals) ≠ 0
             if decimal_part_len ≤ max_decimals
                 return string(x)
             else #truncate decimals
-                return round(x, max_decimals) |> string
+                return round(x,digits=max_decimals) |> string
             end
         elseif x / 10.0^exponent(x) ≈ round(mantissa(x))
             # Just an "int". Does not need decimals.
@@ -152,9 +153,10 @@ function prettify(str::AbstractString)
     # +     2       .   4254      e  -   20
     # +2.4254e-20 (e.g.)
     result = str # will be overwriten
-    for numstr in matchall(num_r,str)
+    for match_result in eachmatch(num_r,str)
+        numstr = match_result.match
         value = parse(Float64,numstr)
-        result = replace(result, numstr, pretty(value))
+        result = replace(result, numstr => pretty(value))
     end
     return result
 end

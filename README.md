@@ -8,19 +8,19 @@ more boilerplate or ugly dumps!
 Before:
 
 ```julia
-julia > val1 = 8595.0
-julia > val2 = 1.0e-5
-julia > println("ρ = $val1 ± $val2")
+julia> val1 = 8595.0
+julia> val2 = 1.0e-5
+julia> println("ρ = $val1 ± $val2")
 ρ = 8595.0 ± 1.0e-5
 ```
 
 Awful! Now:
 
 ```julia
-julia > using PrettyNumber
-julia > val1 = 8595.0
-julia > val2 = 1.0e-5
-julia > prettyprint("ρ = $val1 ± $val2")
+julia> using PrettyNumber
+julia> val1 = 8595.0
+julia> val2 = 1.0e-5
+julia> prettyprint("ρ = $val1 ± $val2")
 ρ = 8595 ± 1⋅10⁻⁵
 ```
 
